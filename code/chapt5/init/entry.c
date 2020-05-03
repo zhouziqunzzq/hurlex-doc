@@ -19,6 +19,11 @@
 #include "console.h"
 #include "debug.h"
 
+void foobar()
+{
+    panic("foobar");
+}
+
 int kern_entry()
 {
 	init_debug();
@@ -27,7 +32,8 @@ int kern_entry()
 
 	printk_color(rc_black, rc_green, "Hello, OS kernel!\n");
 
-	panic("test");
+	// panic("test");
+    foobar();
 
 	return 0;
 }

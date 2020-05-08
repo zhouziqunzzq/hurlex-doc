@@ -17,10 +17,12 @@ S_OBJECTS = $(patsubst %.s, %.o, $(S_SOURCES))
 CC = gcc
 LD = ld
 ASM = nasm
+EXT2MOUNT = fuse-ext2
 
 C_FLAGS = -c -Wall -m32 -ggdb -gstabs+ -nostdinc -fno-builtin -fno-stack-protector -I include
 LD_FLAGS = -T scripts/kernel.ld -m elf_i386 -nostdlib
 ASM_FLAGS = -f elf -g -F stabs
+EXT2MOUNT_FLAGS = -o force
 
 all: $(S_OBJECTS) $(C_OBJECTS) link update_image
 
@@ -43,14 +45,14 @@ clean:
 
 .PHONY:update_image
 update_image:
-	sudo mount floppy.img /mnt/kernel
+	sudo $(EXT2MOUNT) floppy.img /mnt/kernel $(EXT2MOUNT_FLAGS)
 	sudo cp hx_kernel /mnt/kernel/hx_kernel
 	sleep 1
 	sudo umount /mnt/kernel
 
 .PHONY:mount_image
 mount_image:
-	sudo mount floppy.img /mnt/kernel
+	sudo $(EXT2MOUNT) floppy.img /mnt/kernel $(EXT2MOUNT_FLAGS)
 
 .PHONY:umount_image
 umount_image:
@@ -58,7 +60,8 @@ umount_image:
 
 .PHONY:qemu
 qemu:
-	qemu -fda floppy.img -boot a
+	qemu -fda floppy.img -boot a	
+	#add '-nographic' option if using server of linux distro, such as fedora-server,or "gtk initialization failed" error will occur.
 
 .PHONY:bochs
 bochs:

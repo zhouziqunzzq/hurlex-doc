@@ -100,6 +100,8 @@ void kern_init()
 	show_memory_map();
 	init_pmm();
 
+    init_vmm();
+
 	printk_color(rc_black, rc_red, "\nThe Count of Physical Memory Page is: %u\n\n", phy_page_count);
 
 	uint32_t allc_addr = NULL;
